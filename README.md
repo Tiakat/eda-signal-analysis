@@ -4,9 +4,9 @@ Complete analysis pipeline for Electrodermal Activity (EDA) data from the SENSE 
 
 ## Study Background
 
-The SENSE study (Studies examining Emotional responses to Nature-inspired artiStic Experience) examines how digital reproductions of Impressionist paintings, combined with plant-based sonification (music generated from plants' own bioelectrical signals), elicit emotional responses across different sensory modalities: visual, auditory, and combined.
+The SENSE study (Studies examining Emotional responses to Nature-inspired artiStic Experience) examines how digital reproductions of Impressionist paintings, combined with plant-based sonification (music generated from plants' bioelectrical signals), elicit emotional responses across different sensory modalities: visual, auditory, and combined.
 
-**Key references:**
+Key references:
 - Galery, Fauvet, Djerroud et al. (2025) - Young adults' emotional responses to nature-inspired art
 - Fauvet, Galery, Djerroud et al. (2025) - Older adults' emotional responses
 - Jang et al. (2014) - Relationship between affective dimensions and physiological responses
@@ -14,7 +14,7 @@ The SENSE study (Studies examining Emotional responses to Nature-inspired artiSt
 ## Methods Overview
 
 ### Experimental Design
-- Participants: 40 young adults (18-35 years, mean age 26.7 ± 4.6)
+- Participants: 40 young adults (18-35 years, mean age 26.7 +- 4.6)
 - Design: One-arm, open-label, pre-post experimental
 - Modalities: Visual-only, Auditory-only, Combined (audiovisual)
 - Stimuli per participant: 14 stimulations
@@ -34,10 +34,10 @@ The SENSE study (Studies examining Emotional responses to Nature-inspired artiSt
 
 ### 1. Preprocessing (EDAQA - Kleckner et al., 2018)
 Four-rule quality assessment:
-- Rule 1: EDA out of range (0.05-60 µS)
-- Rule 2: Too-rapid changes (>1.0 µS/s or >0.1 µS/100ms)
+- Rule 1: EDA out of range (0.05-60 uS)
+- Rule 2: Too-rapid changes (>1.0 uS/s or >0.1 uS/100ms)
 - Rule 3: Temperature out of range (30-40°C)
-- Rule 4: Transitional data (±5 seconds around invalid segments)
+- Rule 4: Transitional data (+-5 seconds around invalid segments)
 
 Invalid samples are interpolated to preserve temporal continuity.
 
@@ -65,7 +65,7 @@ Invalid samples are interpolated to preserve temporal continuity.
 
 ### Modality Comparison (N=40, after sensitization correction)
 
-| Modality | Mean SCL (µS) | ± SEM | vs Combined |
+| Modality | Mean SCL (uS) | +- SEM | vs Combined |
 |----------|---------------|-------|--------------|
 | Visual | 2.354 | 0.060 | p = 0.028 |
 | Auditory | 2.283 | 0.052 | p = 0.003 |
@@ -75,7 +75,7 @@ ANOVA: F = 3.957, p = 0.021
 
 ### Perceived Beauty Predicts Valence
 
-| Predictor | β | p-value |
+| Predictor | Beta | p-value |
 |-----------|-----|---------|
 | Perceived beauty | 0.36-0.55 | <0.001 |
 | Arts engagement | -1.83 (SCL) | 0.008 |
@@ -89,23 +89,27 @@ ANOVA: F = 3.957, p = 0.021
 ├── LICENSE
 │
 ├── 01_preprocessing/
-│   ├── add_stimulus_labels.py
-│   ├── extract_windows.py
-│   ├── add_modality_column.py
-│   └── edaqa.py
+│   ├── Match stimulus markers and add labels to filtered EDA files.py
+│   ├── Extract windows with 5s before AND 5s after.py
+│   ├── categorisation.py
+│   ├── checking-the-data.py
+│   └── filtration_litterature.py
 │
 ├── 02_analysis/
-│   ├── correlation_analysis.py
-│   ├── modalite_analysis.py
-│   ├── position_analysis.py
-│   ├── complete_analysis_40_jeunes.py
-│   ├── visualize_all_participants.py
-│   └── compare_029_049.py
+│   ├── Read, clean, filter, and save the EDA data.py
+│   ├── data-integration.py
+│   ├── order-stimulation.py
+│   ├── specific eda analysis.py
+│   ├── EDA ANALYSIS.py
+│   ├── variation.py
+│   ├── 3_MODALITES.py
+│   ├── order.py
+│   ├── checkagain29+49.py
+│   └── eda_analysis_complete.py
 │
 ├── 03_visualization/
-│   ├── generate_plots.py
-│   ├── png2_statistical_analysis.py
-│   └── generate_correlation_graphs.py
+│   ├── filtration_litterature.py
+│   └── data-integration.py
 │
 ├── data/
 │   ├── raw/
@@ -116,6 +120,32 @@ ANOVA: F = 3.957, p = 0.021
 │
 └── references.bib
 ```
+
+## Script Descriptions
+
+### Preprocessing Scripts
+
+| Script | Description |
+|--------|-------------|
+| Match stimulus markers and add labels to filtered EDA files.py | Extracts participant IDs from filenames, matches with Excel stimulus markers, adds stimulus labels to EDA data |
+| Extract windows with 5s before AND 5s after.py | Extracts 50-second windows (5s pre-stimulus, 40s stimulation, 5s post-stimulus) from labeled EDA files |
+| categorisation.py | Adds modality column (image, music, combined, none) to each labeled file based on stimulus name |
+| checking-the-data.py | Verification script for modality column assignment |
+| filtration_litterature.py | Generates PNG1 (4-panel preprocessing visualization) and PNG2 (LMM statistical analysis) |
+
+### Analysis Scripts
+
+| Script | Description |
+|--------|-------------|
+| Read, clean, filter, and save the EDA data.py | Loads EDA data, applies quality assessment, extracts SCL metrics, matches demographic data |
+| data-integration.py | Merges Excel demographic data with EDA metrics, generates correlation graphs |
+| order-stimulation.py | Creates summary of exact 40-second stimulation windows for all participants |
+| specific eda analysis.py | Compares stimuli by name (not presentation order), handles counterbalancing |
+| EDA ANALYSIS.py | Complete analysis for all participants (004 to 064) with range normalization |
+| variation.py | Full corrected analysis with real timestamps, stimulus mapping, position filtering |
+| 3_MODALITES.py | Compares three modalities (visual, auditory, combined) with counterbalancing and sensitization correction |
+| order.py | Analyzes intra-block position effects with counterbalanced design |
+| checkagain29+49.py | Generates detailed graphs for participants 029 and 049 with signal cut at 1200 seconds |
 
 ## Installation
 
@@ -169,43 +199,51 @@ openpyxl>=3.0.0
 
 ## Usage Examples
 
-### Run complete analysis pipeline
+Run complete preprocessing pipeline:
 
 ```python
-python 01_preprocessing/add_stimulus_labels.py
-python 01_preprocessing/extract_windows.py
-python 01_preprocessing/add_modality_column.py
-python 03_visualization/generate_plots.py
+python 01_preprocessing/Match\ stimulus\ markers\ and\ add\ labels\ to\ filtered\ EDA\ files.py
+python 01_preprocessing/Extract\ windows\ with\ 5s\ before\ AND\ 5s\ after.py
+python 01_preprocessing/categorisation.py
+python 01_preprocessing/filtration_litterature.py
 ```
 
-### Run statistical analysis
+Run statistical analysis:
 
 ```python
-python 02_analysis/modalite_analysis.py
-python 02_analysis/position_analysis.py
-python 02_analysis/complete_analysis_40_jeunes.py
+python 02_analysis/3_MODALITES.py
+python 02_analysis/order.py
+python 02_analysis/variation.py
 ```
 
-### Generate correlation graphs
+Generate correlation graphs:
 
 ```python
-python 03_visualization/generate_correlation_graphs.py
+python 02_analysis/data-integration.py
 ```
 
 ## Output Files
 
-### Preprocessing Visualizations
+### Preprocessing Visualizations (PNG1)
 Four panels per participant:
 1. Raw EDA with EDAQA mask
 2. SCL Butterworth low-pass 1 Hz (interpolated)
 3. SCL spline-detrended
 4. SCR band-pass (0.0159-5 Hz) with detected peaks
 
-### Statistical Analysis
+### Statistical Analysis (PNG2)
+- LMM predictions versus actual SCL
+- Filtering technique comparison
+- Condition effects with visible differences
+- Covariate effects (Arts engagement, Eco-anxiety, Sex)
+- Temporal evolution by modality
+
+### Data Files
 - statistiques_modalites_corrige.csv - Modality statistics
-- resultats_tests_statistiques_corrige.csv - ANOVA/t-test results
+- resultats_tests_statistiques_corrige.csv - ANOVA and t-test results
 - matrice_participants_stimuli.csv - Participant by stimulus matrix
 - pentes_sensibilisation_participants.csv - Individual sensitization slopes
+- donnees_contrebalancees.csv - Counterbalanced data by participant
 
 ## Configuration Parameters
 
@@ -230,5 +268,5 @@ MIT License
 Copyright (c) 2025 Kevin Galery, Cordelia Fauvet, Katia Djerroud
 
 ## Contact
+
 katia djerroud - katia.djerroud@umontreal.ca
-Kevin Galery - kevin.galery.ccsmtl@ssss.gouv.qc.ca
